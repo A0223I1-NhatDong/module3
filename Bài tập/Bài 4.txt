@@ -1,0 +1,50 @@
+create database bai4;
+use bai4;
+
+create table class (
+classID int not null auto_increment primary key,
+className varchar(60) not null,
+StartDate date not null ,
+Statuss bit
+);
+create table Student (
+StudentID int not null primary key auto_increment,
+StudentName varchar(30) not null,
+Address varchar (50) ,
+Phone varchar (20),
+Statuss bit ,
+ClassID int not null
+);
+create table Subjectt (
+subID int auto_increment primary key not null,
+subName varchar (30) not null,
+Credit tinyint not null default 1 check (credit >=1),
+Statuss bit default 1
+);
+create table Mark (
+MarkID int not null auto_increment primary key,
+subID int not null,
+StudentID int not null,
+Mark float default 0 check (mark between 0 and 100),
+Examtime tinyint default 1,
+unique (SubID,StudentID),
+foreign key (subID) references Subjectt (subid),
+foreign key(studentID) references student (studentId)
+);
+
+-- Hiển thị tất cả các thông tin môn học có credit lớn nhất
+select subid,subname,statuss , max(credit) from subjectt 
+group by subid,subname having max(credit) >= all(select max(credit) from subjectt group by subid);
+
+-- Hiển thị thông tin các môn học có điểm thi cao 
+select sub.subid,sub.subname, max(m.mark) from subjectt sub 
+join mark m on sub.subid = m.subid
+group by sub.subid,sub.subname
+having max(m.mark) >= all (select max(m.mark) from mark m group by m.markid);
+
+
+--  Hiển thị các thông tin sin hvieen và điểm trung bình của mỗi sinh viên,và xắp sếp thứ tự giảm dần 
+select s.studentid, s.studentname, avg(m.mark) as 'Điểm Trung Bình '
+from student s 
+join mark m on s.studentid = m.studentid
+group by s.studentid, s.studentname order by avg(m.mark) desc; 

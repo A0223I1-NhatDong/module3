@@ -1,0 +1,30 @@
+create database QLBH;
+use QLBH;
+create table cus (
+c_id int auto_increment,
+c_name varchar(50),
+c_age date,
+primary key (c_id)
+);
+create table oder (
+o_id int auto_increment,
+o_date date,
+o_totalprice double,
+c_id int,
+primary key (o_id),
+foreign key (c_id) references cus (c_id)
+);
+create table product (
+p_id int auto_increment,
+p_name varchar(50),
+p_price double,
+primary key(p_id)
+);
+create table o_detail (
+o_id int ,
+p_id int,
+odqty int,
+primary key (o_id,p_id),
+foreign key (o_id) references oder (o_id),
+foreign key (p_id) references product (p_id)
+);

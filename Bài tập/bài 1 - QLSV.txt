@@ -1,0 +1,11 @@
+create database bai1_quanlysinhvien;
+create table class (
+id int not null auto_increment primary key,
+name_class varchar (45)
+);
+create table teacher(
+id int not null auto_increment primary key,
+name_teacher varchar (45),
+age date,
+country varchar (45)
+);

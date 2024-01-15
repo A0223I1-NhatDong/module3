@@ -1,0 +1,52 @@
+create database bai3_QLBH;
+use bai3_QLBH;
+create table cus (
+cID int primary key auto_increment,
+cName varchar (25),
+cAge tinyint
+);
+create table orderr (
+oID int auto_increment primary key,
+cID int,
+oDate date,
+oTotalPrice int,
+foreign key (cID) references cus (cID)
+);
+create table product (
+pID int primary key auto_increment,
+pName varchar (25),
+pPrice int
+);
+create table orDetail (
+oID int ,
+pID int,
+odQty int,
+foreign key (oID) references orderr (oID),
+foreign key (pID) references product (pID)
+);
+
+insert into cus (cName,cAge) values ('Minh Quan', 10),('Ngoc Oanh', 20),('Hong Ha',50);
+insert into orderr (cID,oDate,oTotalPrice) values (1,'2006-3-21',Null),(2,'2006-3-23',Null),(1,'2006-3-16',Null);
+insert into product (pName,pPrice) values ('May Giat',3),('Tu Lanh',5),('DIeu Hoa',7),('Quat',1),('Bep Dien',2);
+insert into orDetail values (1,1,3),(1,3,7),(1,4,2),(2,1,1),(3,1,8),(2,5,4),(2,3,3);
+
+-- Hiển thị thông tin oID, oDate , oPrice 
+select   oID, oDate, oTotalPrice from orderr;
+-- Hiển thị danh sách các khách hàng đã mua hàng và danh sách sản phẩm được mua bởi các khách 
+ select c.cname, p.pname from cus c join orderr o on c.cid = o.cid
+join ordetail od on o.oid = od.oid
+join product p on od.pid = p.pid; 
+
+--  Hiển thị khách hàng không mua hàng nào 
+select c.cname from cus c left join orderr  o on c.cid=o.cid  where o.cid is null; 
+
+-- Hiển thị mã hóa đơn, ngày bán và giá tiền của từng hóa đơn 
+select o.oid as 'Mã Hoá Đơn', o.odate as 'Ngày Bán', sum(od.odqty * p.pprice) as'Tổng Tiền' 
+from orderr o 
+join ordetail od on o.oid = od.oid
+join product p on od.pid = p.pid
+group by o.oid;
+--
+select cus.*,product.* from cus left join orderr on cus.cid = orderr.cid
+left join ordetail on orderr.oid = ordetail.oid
+left join product on ordetail.pid = product.pid;

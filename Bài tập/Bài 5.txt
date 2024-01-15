@@ -1,0 +1,68 @@
+create database bai5;
+use bai5;
+create table product(
+	id int auto_increment,
+    pcode varchar(30),
+    pname varchar(30),
+    pprice varchar (30),
+    pamount int,
+    pdescription text,
+    pstatus varchar(30),
+    primary key(id)
+);
+insert into product (pcode,pname,pprice,pamount,pdescription,pstatus)
+ values ('001','Ferrari', '10.000.000.000' , 10 ,'Super Car','Available'),
+ ('002','Lamborghini', '12.000.000.000 ', 9 ,'Super Car','Available'),
+ ('003','Bugati', '35.000.000.000 ', 1 ,'Hyper Car','Sold out'),
+ ('004','Maserati', '5.000.000.000 ', 3 ,'Super Car','Sold out');
+
+select * from product;
+explain select * from product;
+
+-- Tạo unique Index 
+create unique index idxproduct on product (pcode);
+explain select* from product where pcode = '001';
+
+-- Tạo composite index
+ create index idx_name_price on product (pname,pprice);
+ explain select* from product where pname = 'Lamborghini' and pprice between 500 and 1000;
+ 
+ 
+ -- Tạo view lấy thông tin :procode , proName,proPrice,proStatuss 
+  create view proView as select pcode,pname,pprice,pstatus from product;
+  
+  
+  -- Xoá View 
+   drop view proview;
+   
+   -- tạo store procedure 
+delimiter //
+   create procedure Getif ()
+   begin 
+   select* from product;
+end //
+
+call getif();
+
+-- tạo store theem 1 sản phẩm mới
+delimiter//
+ create procedure addProduct (
+ in newprocode varchar(40),
+ in newproname varchar(30),
+ in newproprice varchar(30),
+ in newproamount int,
+ in newprodescription text,
+ in newprostatus varchar (30)
+ )
+ begin insert into product 
+ (pcode,pname,pprice,pamount,pdescription,pstatus)
+ values (newprocode,newproname,newproprice,newproamount,newprodescription,newprostatus);
+ end//
+ call addProduct ('005','Mercedes G63','9.000.000',4,'Sport Car','Available')
+ 
+ -- Tạo store sửa thông tin theo ID
+ delimiter //
+  create procedure updateProduct (
+  in iduppro int,
+  in 
+
